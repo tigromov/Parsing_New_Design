@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -15,6 +16,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -85,11 +87,18 @@ public class Main {
 
         Document doc = Jsoup.parse(webDriver.getPageSource());
         Elements page = doc.getElementsByClass("subtitle is-6");
-        String firstProduct = page.first().text();
-        List productStringList = Arrays.asList(firstProduct.split(" "));
-        int numberOFWorlds = productStringList.size();
+        ArrayList skus = new ArrayList();
+        for (Element element :page) {
+            String firstProduct = element.text();
+            List productStringList = Arrays.asList(firstProduct.split(" "));
+            int numberOFWorlds = productStringList.size();
+            String articule = (String) productStringList.get(numberOFWorlds - 1);
+            skus.add(articule);
+        }
+        System.out.println(skus);
 
-        System.out.println(productStringList.get(numberOFWorlds - 1));
+
+
 
 
 
