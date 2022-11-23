@@ -122,15 +122,16 @@ public class Main {
                     }
 
 
-             ///////////////////////////////////////////////переход по ссылкам///////////////////////////////////////////////
+          ////////////////////////////////////////////////////переход по ссылкам///////////////////////////////////////////////
 
             Elements Links = doc.getElementsByClass("is-5");
-        System.out.println(Links.attr("abs:href"));
+        System.out.println(Links.attr());
         ArrayList test = new ArrayList();
         for (Element link : Links) {
-            System.out.println(link.attr("abs:href"));
-        }
+            test.add(link.attr("href"));
+                    }
 
+        System.out.println(test);
        //     test.add(link.select("a").attr("href"));}
 
 
