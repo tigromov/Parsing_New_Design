@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -18,14 +19,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException, IOException, NoSuchElementException {
 
         ///////////////////////////ВРЕМЯ//////////////////////////////////////////////////////////////////
 
@@ -99,7 +97,7 @@ public class Main {
 
        /////////////////////////////////////////////ЦИКЛ ПО СТРАНИЦАМ ТОВАРОВ/////////////////////////////////////////
 
-       // for (int i = 0; i < productsListSize; i++) {
+       //for (int i = 0; i < productsListSize; i++) {
 
             ////////////////////////////////////////////////////ПОЛУЧЕНИЕ АРТИКУЛА/////////////////////////////////////////////////
             Elements productsDescriptions = doc.getElementsByClass("subtitle is-6");
@@ -124,31 +122,29 @@ public class Main {
 
           ////////////////////////////////////////////////////переход по ссылкам///////////////////////////////////////////////
 
-            Elements Links = doc.getElementsByClass("is-5");
-        System.out.println(Links.attr());
-        ArrayList test = new ArrayList();
-        for (Element link : Links) {
-            test.add(link.attr("href"));
-                    }
-
-        System.out.println(test);
-       //     test.add(link.select("a").attr("href"));}
+        Elements links = doc.select(".is-5").not(".subtitle");
 
 
 
-//            if (String.valueOf(link.select("a").attr("href")) !="  "){
-//           // webDriver.get(link.select("a").attr("href"));
-//            System.out.println(link.select("a").attr("href"));}
-//            Thread.sleep(1000);
+        //////////////////////////////////////////////////////парсинг страницы товара////////////////////////////////
+        for (Element link: links) {
+            webDriver.get(link.getElementsByAttribute("href").attr("href"));
+            Thread.sleep(3000);
 
- //       }
-        System.out.println(Links.size());
+           try{ WebElement buttonClose = webDriver.findElement(By.xpath("//*[@id=\"dialogService\"]/div/div[1]/div[1]/div/ul[1]/li[11]/a"));
+            buttonClose.click();}catch (org.openqa.selenium.NoSuchElementException e){}
+
+            Document productPageDoс = Jsoup.parse(webDriver.getPageSource());
+            Elements priceEl = productPageDoс.getElementsByClass("sellers-table__price-cell-text");
+            //System.out.println(priceEl);
+            String firstPrice = priceEl.first().text();
+            System.out.println(firstPrice);
 
 
-//             System.out.println(Links);
-//
 
 
+
+        }
 
 
 
@@ -158,8 +154,20 @@ public class Main {
 
 
 
-        //System.out.println(prodCounter);
-     //   }   ///открыть скобку общего главного цикла
+
+
+
+
+
+
+
+
+
+
+
+
+        System.out.println(prodCounter);
+     //  }   ///открыть скобку общего главного цикла
 
 
 
